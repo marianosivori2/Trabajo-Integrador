@@ -6,7 +6,7 @@ class ChatServer(LineReceiver):
 
     def connectionMade(self):
         self.clients.append(self)
-        self.sendLine(b"Welcome to the chat server!")
+        self.sendLine(b"Bienvenido al Chat del Servidor!")
 
     def connectionLost(self, reason):
         self.clients.remove(self)
