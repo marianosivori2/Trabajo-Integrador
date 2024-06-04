@@ -1,5 +1,6 @@
 from twisted.internet import reactor, protocol
 from twisted.protocols.basic import LineReceiver
+import config
 
 class ChatServer(LineReceiver):
     clients = []
@@ -22,5 +23,6 @@ class ChatServerFactory(protocol.Factory):
         return ChatServer()
 
 if __name__ == "__main__":
-    reactor.listenTCP(8000, ChatServerFactory())
+    reactor.listenTCP(config.SERVER_PORT, ChatServerFactory())
     reactor.run()
+
