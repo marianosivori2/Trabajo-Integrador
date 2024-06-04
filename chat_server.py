@@ -1,0 +1,26 @@
+from twisted.internet import reactor, protocol
+from twisted.protocols.basic import LineReceiver
+
+class ChatServer(LineReceiver):
+    clients = []
+
+    def connectionMade(self):
+        self.clients.append(self)
+        self.sendLine(b"Welcome to the chat server!")
+
+    def connectionLost(self, reason):
+        self.clients.remove(self)
+
+    def lineReceived(self, line):
+        message = f"<{self.transport.getHost()}> {line.decode('utf-8')}"
+        for client in self.clients:
+            if client != self:
+                client.sendLine(message.encode('utf-8'))
+
+class ChatServerFactory(protocol.Factory):
+    def buildProtocol(self, addr):
+        return ChatServer()
+
+if __name__ == "__main__":
+    reactor.listenTCP(8000, ChatServerFactory())
+    reactor.run()
