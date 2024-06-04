@@ -43,7 +43,3 @@ Puedes cambiar el puerto del servidor editando el archivo `config.py`:
 ```python
 SERVER_PORT = 8000
 
-Licencia
-Este proyecto está licenciado bajo la Licencia MIT.
-
-Con esta estructura, tienes un archivo adicional `config.py` que maneja la configuración del servidor y del cliente, haciendo el proyecto más modular y fácil de mantener.
