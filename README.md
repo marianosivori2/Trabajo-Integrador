@@ -1,4 +1,4 @@
-# Chat Server con Twisted
+# Servidor de Chat con Twisted
 
 Este proyecto implementa un servidor de chat simple usando el framework Twisted. Permite a múltiples clientes conectarse y chatear en tiempo real.
 
