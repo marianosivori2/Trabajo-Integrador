@@ -18,7 +18,10 @@ Este proyecto crea un servidor de chat utilizando el framework Twisted. Permite 
 
 Instalá Twisted usando pip:
 
+
+```bash 
 pip install twisted
+```
 
 ## Uso
 
@@ -41,4 +44,5 @@ Podés cambiar el puerto del servidor editando el archivo `config.py`:
 
 ```python
 SERVER_PORT = 8000
+```
 
