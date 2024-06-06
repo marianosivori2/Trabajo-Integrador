@@ -58,7 +58,7 @@
       reactor.listenTCP(config.SERVER_PORT, ChatServerFactory())
       reactor.run()
 ```
-- "reactor.listenTCP(config.SERVER_PORT, ChatServerFactory())": Configura el servidor para escuchar conexiones en el puerto especificado.
+- "reactor.listenTCP(config.SERVER_PORT, ChatServerFactory())": Configura el servidor para aceptar conexiones en el puerto especificado.
 
 - "reactor.run()": Inicia el bucle de eventos del servidor.
   
