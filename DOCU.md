@@ -47,8 +47,8 @@
 
 ```python 
     class ChatServerFactory(protocol.Factory):
-      def buildProtocol(self, addr):
-        return ChatServer()
+        def buildProtocol(self, addr):
+          return ChatServer()
 ```
 
 ### 4. Inicio del Servidor
