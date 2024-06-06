@@ -21,16 +21,16 @@
         clients = []
       
         def connectionMade(self):
-          self.clients.append(self)
-          self.sendLine(b"Bienvenido al Chat del Servidor!")
+            self.clients.append(self)
+            self.sendLine(b"Bienvenido al Chat del Servidor!")
           
         def connectionLost(self, reason):
-          self.clients.remove(self)
+            self.clients.remove(self)
           
         def lineReceived(self, line):
-          message = f"<{self.transport.getHost()}> {line.decode('utf-8')}"
-          for client in self.clients:
-            if client != self:
+            message = f"<{self.transport.getHost()}> {line.decode('utf-8')}"
+            for client in self.clients:
+              if client != self:
                 client.sendLine(message.encode('utf-8'))
 ```
 
@@ -48,7 +48,7 @@
 ```python 
     class ChatServerFactory(protocol.Factory):
         def buildProtocol(self, addr):
-          return ChatServer()
+            return ChatServer()
 ```
 
 ### 4. Inicio del Servidor
@@ -81,11 +81,11 @@
 ```python
     class ChatClient(LineReceiver):
 
-      def connectionMade(self):
-        self.sendLine(b"Hola, Servidor!")
+        def connectionMade(self):
+            self.sendLine(b"Hola, Servidor!")
 
-      def lineReceived(self, line):
-        print(f"Server: {line.decode('utf-8')}")
+        def lineReceived(self, line):
+            print(f"Server: {line.decode('utf-8')}")
 
 
 ```
@@ -100,16 +100,16 @@
 ```python
     class ChatClientFactory(protocol.ClientFactory):
 
-      def buildProtocol(self, addr):
-        return ChatClient()
+        def buildProtocol(self, addr):
+            return ChatClient()
 
-      def clientConnectionFailed(self, connector, reason):
-        print("Error de Conexión")
-        reactor.stop()
+        def clientConnectionFailed(self, connector, reason):
+            print("Error de Conexión")
+            reactor.stop()
 
-      def clientConnectionLost(self, connector, reason):
-        print("Se perdió la Conexión")
-        reactor.stop()
+        def clientConnectionLost(self, connector, reason):
+            print("Se perdió la Conexión")
+            reactor.stop()
 ```
 
 - buildProtocol: Crea y devuelve una instancia de ChatClient.
