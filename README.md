@@ -8,6 +8,7 @@ Este proyecto crea un servidor de chat utilizando el framework Twisted. Permite 
 - `chat_client.py`: Contiene la implementación del cliente de chat.
 - `config.py`: Contiene la configuración del servidor y del cliente.
 - `README.md`: Este archivo contiene las instrucciones sobre cómo usar el proyecto.
+- `DOCU.md`: Este archivo contiene la documentación y explicación del código
 
 ## Requisitos
 
