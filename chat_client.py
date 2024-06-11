@@ -8,6 +8,10 @@ class ChatClient(LineReceiver):
 
     def lineReceived(self, line):
         print(f"Server: {line.decode('utf-8')}")
+    
+    def sendMessage(self, message):
+        self.sendLine(message.encode('utf-8'))
+
 
 class ChatClientFactory(protocol.ClientFactory):
     def buildProtocol(self, addr):
