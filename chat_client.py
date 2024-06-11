@@ -8,10 +8,12 @@ class ChatClient(LineReceiver):
 
     def lineReceived(self, line):
         print(f"Server: {line.decode('utf-8')}")
-    
+
     def sendMessage(self, message):
         self.sendLine(message.encode('utf-8'))
 
+    def connectionLost(self, reason):
+        print("Se perdió la Conexión")
 
 class ChatClientFactory(protocol.ClientFactory):
     def buildProtocol(self, addr):
@@ -31,5 +33,6 @@ if __name__ == "__main__":
         print("Usage: python chat_client.py <host>")
         sys.exit(1)
     host = sys.argv[1]
-    reactor.connectTCP(host, 8000, ChatClientFactory())
+    client_factory = ChatClientFactory()
+    reactor.connectTCP(host, 8000, client_factory)
     reactor.run()
