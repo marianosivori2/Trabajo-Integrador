@@ -8,8 +8,6 @@ class ChatClient(LineReceiver):
 
     def lineReceived(self, line):
         print(f"Server: {line.decode('utf-8')}")
-        if line.strip() == b"Bienvenido al Chat del Servidor!":
-            self.prompt_for_message()
 
 class ChatClientFactory(protocol.ClientFactory):
     def buildProtocol(self, addr):
