@@ -2,25 +2,12 @@ from twisted.internet import reactor, protocol
 from twisted.protocols.basic import LineReceiver
 import config
 
-from twisted.internet import reactor, protocol
-from twisted.protocols.basic import LineReceiver
-
 class ChatClient(LineReceiver):
     def connectionMade(self):
         self.sendLine(b"Hola, Servidor!")
 
     def lineReceived(self, line):
         print(f"Server: {line.decode('utf-8')}")
-        
-        if line.strip() == b"Bienvenido al Chat del Servidor!":
-            self.prompt_for_message()
-
-    def prompt_for_message(self):
-        message = input("Escribe tu mensaje ('quit' para salir): ")
-        if message.lower() == "quit":
-            self.transport.loseConnection() 
-        else:
-            self.sendLine(message.encode('utf-8'))
 
 class ChatClientFactory(protocol.ClientFactory):
     def buildProtocol(self, addr):
