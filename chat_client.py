@@ -5,14 +5,17 @@ import config
 class ChatClient(LineReceiver):
     def connectionMade(self):
         self.sendLine(b"Hola, Servidor!")
+        self.prompt_for_message()
 
     def lineReceived(self, line):
         print(f"Server: {line.decode('utf-8')}")
-        self.prompt_for_message()
 
     def prompt_for_message(self):
-        message = input("Escribe tu mensaje: ")
-        self.sendLine(message.encode('utf-8'))
+        message = input("Escribe tu mensaje (o 'exit' para salir): ")
+        if message.lower() == 'exit':
+            self.transport.loseConnection() 
+        else:
+            self.sendLine(message.encode('utf-8'))
 
 class ChatClientFactory(protocol.ClientFactory):
     def buildProtocol(self, addr):
