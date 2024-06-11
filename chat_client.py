@@ -5,15 +5,24 @@ import config
 class ChatClient(LineReceiver):
     def connectionMade(self):
         self.sendLine(b"Hola, Servidor!")
-        self.prompt_for_message()
+        self.transport.write(b"Escribe tu mensaje: ")
 
     def lineReceived(self, line):
         print(f"Server: {line.decode('utf-8')}")
-        self.prompt_for_message()
+        self.transport.write(b"Escribe tu mensaje: ")
 
-    def prompt_for_message(self):
-        message = input("Escribe tu mensaje: ")
-        self.sendLine(message.encode('utf-8'))
+    def rawDataReceived(self, data):
+        pass
+
+    def lineLengthExceeded(self, line):
+        print("ERROR: Mensaje demasiado largo.")
+
+    def connectionLost(self, reason):
+        pass
+
+    def write(self, line):
+        self.sendLine(line.encode('utf-8'))
+
 
 class ChatClientFactory(protocol.ClientFactory):
     def buildProtocol(self, addr):
