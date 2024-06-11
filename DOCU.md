@@ -92,6 +92,23 @@
 
 ```
 
+`from twisted.internet import reactor, protocol`:
+
+- reactor: Igual que en el servidor, el reactor maneja el bucle de eventos y la E/S asíncrona para el cliente.
+
+- protocol: Utilizado para definir la fábrica del protocolo del cliente, facilitando la creación y gestión de la conexión con el servidor.
+
+  
+`from twisted.protocols.basic import LineReceiver`: 
+
+- LineReceiver: Igual que en el servidor, facilita el manejo de la comunicación de línea en el cliente, permitiendo recibir y enviar mensajes línea por línea.
+
+`import config`:
+
+- config: Igual que en el servidor, importa el archivo de configuración que contiene la configuración del servidor y del cliente, permitiendo utilizar configuraciones centralizadas, como el puerto del servidor.
+
+
+
 ### 2. Clase ChatClient: Maneja la conexión al servidor y la recepción de mensajes.
 
 ```python
