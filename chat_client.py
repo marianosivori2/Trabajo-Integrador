@@ -13,13 +13,8 @@ class ChatClient(LineReceiver):
             self.prompt_for_message()
 
     def prompt_for_message(self):
-        while True:
-            message = input("Escribe tu mensaje (o escribe 'quit' para salir): ")
-            if message.lower() == 'quit':
-                self.transport.loseConnection()
-                break
-            else:
-                self.sendLine(message.encode('utf-8'))
+        message = input("Escribe tu mensaje: ")
+        self.sendLine(message.encode('utf-8'))
 
 
 
