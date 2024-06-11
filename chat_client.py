@@ -28,11 +28,11 @@ class ChatClientFactory(protocol.ClientFactory):
         reactor.stop()
 
 if __name__ == "__main__":
-    import sys
     if len(sys.argv) != 2:
         print("Usage: python chat_client.py <host>")
         sys.exit(1)
     host = sys.argv[1]
-    client_factory = ChatClientFactory()
+    client_factory = protocol.ClientFactory()
+    client_factory.protocol = ChatClient
     reactor.connectTCP(host, 8000, client_factory)
     reactor.run()
