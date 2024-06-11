@@ -29,4 +29,3 @@ if __name__ == "__main__":
     host = sys.argv[1]
     reactor.connectTCP(host, config.SERVER_PORT, ChatClientFactory())
     reactor.run()
-
