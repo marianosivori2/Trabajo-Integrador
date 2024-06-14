@@ -39,7 +39,7 @@ python chat_server.py
 
 ### 2. Conectate al servidor de chat desde un cliente:
 
-Luego, abriremos otra ventana cmd para ejecutar este codigo, el cual es el que se une al servidor alojado.
+Luego, abriremos otra ventana cmd para ejecutar este codigo, el cual se une al servidor alojado.
 
 ```cmd
 python chat_client.py <host>
