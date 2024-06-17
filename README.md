@@ -21,7 +21,7 @@ Este proyecto crea un servidor de chat utilizando el framework Twisted. Permite 
 
 2. Instalá Twisted usando pip:
 
-3. Abriremos la consola (cmd) y tipearemos "pip install twisted"
+Abriremos la consola (cmd) y tipearemos "pip install twisted"
 
 ```cmd
 pip install twisted
