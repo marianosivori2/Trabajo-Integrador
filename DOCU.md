@@ -165,7 +165,7 @@
 
 - prompt_for_message: Este métopo maneja la solicitud de ingreso de mensajes.
 
-- get_imput: Con esta función se puede recibir mensajes del servidor, y ademas, si detecta el comando especifico para desconectarse, devuelve un break, que logra la desconexión.
+- get_imput: Con esta función se puede recibir mensajes del servidor, y ademas, si detecta el comando especifico para desconectarse, devuelve un break que logra la desconexión.
 
 
 ### 3. Clase ChatClientFactory: Crea instancias de ChatClient y maneja la conexión.
