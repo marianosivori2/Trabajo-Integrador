@@ -18,7 +18,7 @@ class ChatServer(LineReceiver):
         if self.username is None:
             self.username = line.decode('utf-8')
             self.clients.append(self)
-            self.sendLine(f"Bienvenido, {self.username}! Si quieres desconectarte, TIPEA /salir".encode('utf-8'))
+            self.sendLine(f"Bienvenido, {self.username}!".encode('utf-8'))
             message = f"{self.username} se ha unido al chat."
             self.broadcast_message(message.encode('utf-8'))
         else:
