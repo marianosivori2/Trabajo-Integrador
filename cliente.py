@@ -4,18 +4,23 @@ import config
 
 class ChatClient(LineReceiver):
     def connectionMade(self):
-        self.sendLine(b"Hola, Servidor!")
-        self.prompt_for_message()
+        self.prompt_for_username()
 
     def lineReceived(self, line):
-        print(f"Server: {line.decode('utf-8')}")
+        print(line.decode('utf-8'))
+        if self.username:
+            self.prompt_for_message()
+
+    def prompt_for_username(self):
+        self.username = input("Por favor, ingresa tu nombre de usuario: ")
+        self.sendLine(self.username.encode('utf-8'))
 
     def prompt_for_message(self):
         reactor.callInThread(self.get_input)
 
     def get_input(self):
         while True:
-            message = input("Escribe tu mensaje (o '/salir' para desconectarte): ")
+            message = input()
             if message == '/salir':
                 reactor.callFromThread(self.transport.loseConnection)
                 break
@@ -30,7 +35,7 @@ class ChatClientFactory(protocol.ClientFactory):
         reactor.stop()
 
     def clientConnectionLost(self, connector, reason):
-        print("Se perdió la Conexión")
+        print("Te has desconectado")
         reactor.stop()
 
 if __name__ == "__main__":
