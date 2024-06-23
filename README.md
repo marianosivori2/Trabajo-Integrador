@@ -4,8 +4,8 @@ Este proyecto crea un servidor de chat utilizando el framework Twisted. Permite 
 
 ## Archivos
 
-- `chat_server.py`: Contiene la implementación del servidor de chat.
-- `chat_client.py`: Contiene la implementación del cliente de chat.
+- `server.py`: Contiene la implementación del servidor de chat.
+- `cliente.py`: Contiene la implementación del cliente de chat.
 - `config.py`: Contiene la configuración del servidor y del cliente.
 - `README.md`: Este archivo contiene las instrucciones sobre cómo usar el programa.
 - `DOCU.md`: Este archivo contiene la documentación y explicación del código
@@ -33,7 +33,7 @@ pip install twisted
 Abriremos una ventana cmd, y escribiremos "cd" y a su lado la ruta del repositorio.
 
 ```cmd
-cd "ruta de repositorio"
+cd *ruta de repositorio*
 ```
 
 ### 2. Iniciá el servidor de chat:
@@ -41,7 +41,7 @@ cd "ruta de repositorio"
 Una vez ubicada la ruta en el cmd, ejecutaremos este codigo que se encargará de alojar el servidor.
 
 ```cmd
-python chat_server.py
+python server.py
 ```
 
 - Solamente el que hostea el servidor se encarga de ejecutar este comando
@@ -51,7 +51,7 @@ python chat_server.py
 Luego, abriremos otra ventana cmd para ejecutar este codigo, el cual se une al servidor alojado.
 
 ```cmd
-python chat_client.py <host>
+python cliente.py <host>
 ```
 
 - Reemplazá `<host>` con la dirección IP donde se está ejecutando el servidor.
