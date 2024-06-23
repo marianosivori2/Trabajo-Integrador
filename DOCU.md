@@ -35,19 +35,32 @@
 ```python
     class ChatServer(LineReceiver):
         clients = []
-      
-        def connectionMade(self):
-            self.clients.append(self)
-            self.sendLine(b"Bienvenido al Chat del Servidor!")
-          
+
+        def __init__(self):
+            self.username = None
+
         def connectionLost(self, reason):
-            self.clients.remove(self)
-          
+            if self.username:
+                self.clients.remove(self)
+                message = f"{self.username} se ha desconectado."
+                self.broadcast_message(message.encode('utf-8'))
+
         def lineReceived(self, line):
-            message = f"<{self.transport.getHost()}> {line.decode('utf-8')}"
+            if self.username is None:
+                self.username = line.decode('utf-8')
+                self.clients.append(self)
+                self.sendLine(f"Bienvenido, {self.username}!".encode('utf-8'))
+                self.sendLine(b"Escribe /salir para desconectarte del chat.")
+                message = f"{self.username} se ha unido al chat."
+                self.broadcast_message(message.encode('utf-8'))
+            else:
+                message = f"<{self.username}> {line.decode('utf-8')}"
+                self.broadcast_message(message.encode('utf-8'))
+
+        def broadcast_message(self, message):
             for client in self.clients:
-              if client != self:
-                client.sendLine(message.encode('utf-8'))
+                if client != self:
+                    client.sendLine(message)
 ```
 
                 
@@ -55,9 +68,11 @@
   
 - connectionMade: Se llama cuando un cliente se conecta. Añade el cliente a la lista y envía un mensaje de bienvenida.
 
-- connectionLost: Se llama cuando un cliente se desconecta. Elimina el cliente de la lista.
+- connectionLost: Se llama cuando un cliente se desconecta. Elimina el cliente de la lista y envía un mensaje notificando que este usuario se desconectó
 
 - lineReceived: Se llama cuando se recibe un mensaje. Envía el mensaje a todos los clientes conectados, excepto al que lo envió.
+
+- broadcast_message: Método para enviar un mensaje a todos los clientes, exceptuando al emisor del mismo.
 
 ### 3. Clase ChatServerFactory: Crea instancias de ChatServer para manejar nuevas conexiones.
 
@@ -67,12 +82,15 @@
             return ChatServer()
 ```
 
+- buildProtocol: Método para crear y devolver una instancia de `ChatServer` cuando se establece una nueva conexión
+
 ### 4. Inicio del Servidor
 
 ```python
     if __name__ == "__main__":
-      reactor.listenTCP(config.SERVER_PORT, ChatServerFactory())
-      reactor.run()
+        reactor.listenTCP(config.SERVER_PORT, ChatServerFactory())
+        print(f"Servidor abierto en el puerto {config.SERVER_PORT}")
+        reactor.run()
 ```
 - "reactor.listenTCP(config.SERVER_PORT, ChatServerFactory())": Configura el servidor para aceptar conexiones en el puerto especificado.
 
@@ -113,12 +131,28 @@
 
 ```python
     class ChatClient(LineReceiver):
-
         def connectionMade(self):
-            self.sendLine(b"Hola, Servidor!")
+            self.prompt_for_username()
 
         def lineReceived(self, line):
-            print(f"Server: {line.decode('utf-8')}")
+            print(line.decode('utf-8'))
+            if self.username:
+                self.prompt_for_message()
+
+        def prompt_for_username(self):
+            self.username = input("Por favor, ingresa tu nombre de usuario: ")
+            self.sendLine(self.username.encode('utf-8'))
+
+        def prompt_for_message(self):
+            reactor.callInThread(self.get_input)
+
+        def get_input(self):
+            while True:
+                message = input()
+                if message == '/salir':
+                    reactor.callFromThread(self.transport.loseConnection)
+                    break
+                reactor.callFromThread(self.sendLine, message.encode('utf-8'))
 
 
 ```
@@ -127,39 +161,45 @@
 
 - lineReceived: Se llama cuando se recibe un mensaje del servidor. Imprime el mensaje en la consola.
 
+- prompt_for_username: Método que solicita al usuario que ingrese su nombre antes de ingresar al servidor.
+
+- prompt_for_message: Este métopo maneja la solicitud de ingreso de mensajes.
+
+- get_imput: Con esta función se puede recibir mensajes del servidor, y ademas, si detecta el comando especifico para desconectarse, devuelve un break, que logra la desconexión.
+
 
 ### 3. Clase ChatClientFactory: Crea instancias de ChatClient y maneja la conexión.
 
 ```python
     class ChatClientFactory(protocol.ClientFactory):
-
         def buildProtocol(self, addr):
-            return ChatClient()
+        return ChatClient()
 
         def clientConnectionFailed(self, connector, reason):
             print("Error de Conexión")
             reactor.stop()
 
         def clientConnectionLost(self, connector, reason):
-            print("Se perdió la Conexión")
+            print("Te has desconectado")
             reactor.stop()
+
 ```
 
 - buildProtocol: Crea y devuelve una instancia de ChatClient.
   
 - clientConnectionFailed: Se llama cuando la conexión al servidor falla. Imprime un mensaje de error y detiene el reactor.
 
-- clientConnectionLost: Se llama cuando la conexión al servidor se pierde. Imprime un mensaje y detiene el reactor.
+- clientConnectionLost: Se llama cuando el usuario se desconecta del servidor. Imprime un mensaje y detiene el reactor.
 
 
 ### 4. Inicio del cliente:
 
 ```python
-    if __name__ == "__main__":
-        import sys
-        if len(sys.argv) != 2:
-            print("Usage: python chat_client.py <host>")
-            sys.exit(1)
+   if __name__ == "__main__":
+      import sys
+      if len(sys.argv) != 2:
+        print("Usage: python chat_client.py <host>")
+        sys.exit(1)
     host = sys.argv[1]
     reactor.connectTCP(host, config.SERVER_PORT, ChatClientFactory())
     reactor.run()
