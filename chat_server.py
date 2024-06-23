@@ -5,18 +5,30 @@ import config
 class ChatServer(LineReceiver):
     clients = []
 
-    def connectionMade(self):
-        self.clients.append(self)
-        self.sendLine(b"Bienvenido al Chat del Servidor!")
+    def __init__(self):
+        self.username = None
 
     def connectionLost(self, reason):
-        self.clients.remove(self)
+        if self.username:
+            self.clients.remove(self)
+            message = f"{self.username} se ha desconectado."
+            self.broadcast_message(message.encode('utf-8'))
 
     def lineReceived(self, line):
-        message = f"<{self.transport.getHost()}> {line.decode('utf-8')}"
+        if self.username is None:
+            self.username = line.decode('utf-8')
+            self.clients.append(self)
+            self.sendLine(f"Bienvenido, {self.username}!".encode('utf-8'))
+            message = f"{self.username} se ha unido al chat."
+            self.broadcast_message(message.encode('utf-8'))
+        else:
+            message = f"<{self.username}> {line.decode('utf-8')}"
+            self.broadcast_message(message.encode('utf-8'))
+
+    def broadcast_message(self, message):
         for client in self.clients:
             if client != self:
-                client.sendLine(message.encode('utf-8'))
+                client.sendLine(message)
 
 class ChatServerFactory(protocol.Factory):
     def buildProtocol(self, addr):
@@ -24,5 +36,5 @@ class ChatServerFactory(protocol.Factory):
 
 if __name__ == "__main__":
     reactor.listenTCP(config.SERVER_PORT, ChatServerFactory())
+    print(f"Servidor abierto en el puerto {config.SERVER_PORT}")
     reactor.run()
-
