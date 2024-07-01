@@ -66,11 +66,9 @@
                 
 - clients = []: Lista que contiene todos los clientes conectados.
   
-- connectionMade: Se llama cuando un cliente se conecta. Añade el cliente a la lista y envía un mensaje de bienvenida.
-
 - connectionLost: Se llama cuando un cliente se desconecta. Elimina el cliente de la lista y envía un mensaje notificando que este usuario se desconectó
 
-- lineReceived: Se llama cuando se recibe un mensaje. Envía el mensaje a todos los clientes conectados, excepto al que lo envió.
+- lineReceived: Registra nuevos usuarios con su nombre y los añade a la lista de clientes. Luego, reenvía todos los mensajes entrantes a todos los clientes conectados para que puedan ver quién envió cada mensaje.
 
 - broadcast_message: Método para enviar un mensaje a todos los clientes, exceptuando al emisor del mismo.
 
